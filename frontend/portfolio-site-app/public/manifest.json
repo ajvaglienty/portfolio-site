@@ -1,6 +1,6 @@
 {
   "short_name": "Portfolio",
-  "name": "My Portfolio App",
+  "name": "Portfolio App",
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#000000",

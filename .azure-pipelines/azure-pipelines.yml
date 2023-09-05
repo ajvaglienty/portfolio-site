@@ -2,7 +2,7 @@ trigger:
 - main
 
 variables:
-  uiSource: 'frontend/my-portfolio-site-app'
+  uiSource: 'frontend/portfolio-site-app'
   uiBuild: '$(uiSource)/build'
 
 pool:
