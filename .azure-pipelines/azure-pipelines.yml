@@ -1,0 +1,51 @@
+trigger:
+- main
+
+variables:
+  uiSource: 'frontend/my-portfolio-site-app'
+  uiBuild: '$(uiSource)/build'
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+stages:
+- stage: Build
+  jobs:
+  - job: BuildFrontend
+    steps:
+    - task: NodeTool@0
+      inputs:
+        versionSpec: '14.x'
+      displayName: 'Install Node.js'
+
+    - script: |
+        pushd $(uiSource)
+        npm install
+        popd
+      displayName: 'npm install'
+
+    - script: |
+        pushd $(uiSource)
+        npm run build
+        popd
+      displayName: 'npm build'
+
+    - script: |
+        pushd $(uiSource)
+        npm test
+        popd
+      displayName: 'npm test'
+
+    - task: ArchiveFiles@2
+      inputs:
+        rootFolderOrFile: '$(uiBuild)'
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+        replaceExistingArchive: true
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        pathtoPublish: $(Build.ArtifactStagingDirectory)
+        artifactName: 'drop'
+        publishLocation: 'Container'
